@@ -176,8 +176,17 @@ repeated ____ 456-36
 repeated ---- 36
 always .\s.\s." 3-3-3-356
 always .\s.\s. 3-3-3 . . .
-begnum $ 256
 always $ 356-4-234
+always ¢ 356-4-14
+always ￠ 356-4-14
+always £ 356-4-123
+always ￡ 356-4-123
+always ¥ 356-4-13456
+always ￥ 356-4-13456
+always ₩ 356-4-2456
+always ￦ 356-4-2456
+always € 356-4-15
+always ₣ 356-4-124
 always _ 456-36
 always — 36-36
 
