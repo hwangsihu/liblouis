@@ -1,11 +1,13 @@
 # liblouis: Korean (Base table and chars)
 #
-# Based on the braille contraction table in BRLTTY
+# Based on the 2024 revision of the Korean Braille Standard
+# (문화체육관광부 고시 제2024-0005호, [개정] 한국 점자 규정)
 #
 #  Copyright (C) 1995-2012 by The BRLTTY Team.
 #  Copyright (C) 2012 by Samuel Thibault <samuel.thibault@ens-lyon.org>
 #  Copyright (C) 2012 by Mesar Hameed <mesar.hameed@gmail.com>
 #  Copyright (C) 2013 by Joseph Lee <joseph.lee22590@gmail.com>
+#  Copyright (C) 2026 — 2024 revision update
 #
 #  This file is part of liblouis.
 #
@@ -89,13 +91,14 @@ include litdigits6Dots.uti
 
 # Letters are defined in chardefs.cti
 
-# punctuation
-prepunc ( 36
-word ( 36
-noback always ( 36
-postpunc ) 36
-word ) 36
-noback always ) 36
+# Punctuation — 2024 개정 한국 점자 규정 제13·14절
+
+prepunc ( 236-3
+word ( 236-3
+noback always ( 236-3
+postpunc ) 6-356
+word ) 6-356
+noback always ) 6-356
 prepunc " 236
 postpunc " 356
 word " 236
@@ -103,15 +106,18 @@ prepunc ` 236
 prepunc ' 6-236
 postpunc ' 356-3
 word ' 4-3
-word 'em = 
+word 'em =
 word 'tis =
 word 'twas =
-begnum # 3456 print number sign before number
-midnum , 5
+begnum # 3456
+
+# midnum comma is the digit-grouping mark (자릿점, 제41항: dot 2),
+# distinct from sentence comma (postpunc) which is dot 5.
+midnum , 2
 postpunc , 5
 word , 5
 noback always , 5
-decpoint . 3
+decpoint . 256
 midnum - 36
 hyphen - 36
 always \s--\s 36-36
@@ -125,14 +131,14 @@ word ; 56-23
 midnum : 5-2
 postpunc : 5-2
 always : 5-2
-postpunc ! 456
-noback always ! 456
+postpunc ! 235
+noback always ! 235
 midnum / 456-34
 always / 456-34
-always < 5-13
+always < 35-35
 always = 25-25
-always > 46-2
-always + 5-235
+always > 26-26
+always + 26
 postpunc ? 236
 word ? 236
 noback always ? 236
@@ -143,41 +149,83 @@ endnum 's 3-234
 endnum th 1456
 endnum 's 3-234
 always % 356-1234
-midnum ^ 45
-always ^ 456-126
-always ~ 36-36
+midnum * 16
+always * 5-35
+always ^ 4-26
+always ~ 4-35
 always & 4-12346
-midnum * 5-23
-always * 35-35
-prepunc [ 236-3
-word [ 236-3
-always [ 236-3
-postpunc ] 6-356
-word ] 6-356
-always ] 6-356
-prepunc { 236-23
-word { 236-23
-always { 236-23
-postpunc } 56-356
-word } 56-356
-always } 56-356
+prepunc [ 236-23
+word [ 236-23
+always [ 236-23
+postpunc ] 56-356
+word ] 56-356
+always ] 56-356
+prepunc { 236-2
+word { 236-2
+always { 236-2
+postpunc } 5-356
+word } 5-356
+always } 5-356
 always @ 4-1
-always \\ 4-1256
+always \\ 456-16
 always | 456-1256
 always \s-\s 36
-always ..." 5-5-5-356
-always … 5-5-5
-always ... 5-5-5
-always ...' 5-5-5-356-3
+
+# 줄임표 두 종류 (제53항):
+# … 가운뎃점형 = 6-6-6, ... 마침표형 = 256-256-256
+always ..." 256-256-256-356
+always … 6-6-6
+always ... 256-256-256
+always ...' 256-256-256-356-3
 repeated .... 0
-repeated ____ 6-36-36-3
+repeated ____ 456-36
 repeated ---- 36
 always .\s.\s." 3-3-3-356
 always .\s.\s. 3-3-3 . . .
 begnum $ 256
-always $ 4-256
-always _ 6-36-36-3
-always — 56-36-36-23
+always $ 356-4-234
+always _ 456-36
+always — 36-36
+
+# Korean-specific marks (가운뎃점, 낫표, 화살괄호, 화살표 등)
+prepunc · 5-23
+postpunc · 5-23
+word · 5-23
+always · 5-23
+prepunc ・ 5-23
+postpunc ・ 5-23
+word ・ 5-23
+always ・ 5-23
+prepunc 『 56-236
+postpunc 』 356-23
+always 『 56-236
+always 』 356-23
+prepunc 「 5-236
+postpunc 」 356-2
+always 「 5-236
+always 」 356-2
+prepunc 《 56-2356
+postpunc 》 2356-23
+always 《 56-2356
+always 》 2356-23
+prepunc 〈 5-2356
+postpunc 〉 2356-2
+always 〈 5-2356
+always 〉 2356-2
+always ∼ 4-35
+always 〃 356-356
+always ː 6-3
+always → 25-135
+always ← 246-25
+always ↔ 246-25-135
+always ↓ 45-25-135
+always ↑ 56-25-135
+always § 45-234
+always ¶ 45-1234
+always © 45-14
+always ® 45-1235
+always ™ 45-2345
+always • 456-256
 
 # special character sequences
 compbrl :// URLs
