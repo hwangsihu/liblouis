@@ -133,6 +133,8 @@ always < 35-35
 always = 25-25
 always > 26-26
 always + 26
+always × 16
+always ÷ 34-34
 postpunc ? 236
 word ? 236
 noback always ? 236
