@@ -144,7 +144,16 @@ endnum rd 1235-145
 endnum 's 3-234
 endnum th 1456
 endnum 's 3-234
+always %ile 356-1234-2345
+always %p 356-1234-1234
 always % 356-1234
+always ‰ 356-1234-134
+always ° 356-145
+always ℃ 356-145-6-14
+always ℉ 356-145-6-124
+always ′ 356-36
+always ″ 356-36-36
+always Å 356-16
 midnum * 16
 always * 5-35
 always ^ 4-26
