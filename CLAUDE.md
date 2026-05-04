@@ -35,8 +35,21 @@
 - OS: Windows 11, PowerShell 7
 - 설치된 도구: `scoop`, `winget`, Python 3.14 (`py`, `python`), **Poppler** (`pdftotext` 25.12.0)
 - 추출 명령: `pdftotext -layout -enc UTF-8 'C:\braille\[개정]+한국+점자+규정+전문.pdf' 'C:\braille\spec.txt'`
-- **빌드 환경 미구비**: `lou_checkyaml`로 회귀 검증을 못 함. 우선 코드+하네스만
-  작성하고, 추후 빌드 환경 구성 후 일괄 검증 예정.
+- **빌드 환경**: MSYS2 UCRT64 (`C:\msys64\msys2_shell.cmd -ucrt64`).
+  필수 패키지: `mingw-w64-ucrt-x86_64-{gcc,python,pkgconf,libyaml}`.
+  - 빌드: `./autogen.sh && ./configure --enable-ucs4 && make -j4`
+  - **빌드 전 필수 패치 (미커밋)**: `liblouis/metadata.c`의 `#ifdef _MSC_VER` 두 곳을
+    `#if defined(_MSC_VER) || defined(_WIN32)`로 바꿔야 mingw에서 빌드됨
+    (gnulib `dirent.h` ↔ mingw native `dirent.h` 충돌 회피, native Win API 사용).
+    Working tree에 유지. upstream 보고/PR 후보.
+  - 회귀 실행 (PowerShell):
+    ```
+    $env:PATH = "C:\msys64\ucrt64\bin;" + $env:PATH
+    $env:LOUIS_TABLEPATH = "C:\liblouis\tables"
+    & "C:\liblouis\tools\.libs\lou_checkyaml.exe" "C:\liblouis\tests\braille-specs\ko-g2_harness.yaml"
+    ```
+  - DLL 우선순위 주의: Windows가 `C:\Windows\System32\liblouis.dll`(접근성용)을 갖고
+    있으므로, `cp liblouis/.libs/liblouis.dll tools/.libs/`로 exe 옆에 둬야 우리 DLL이 로드됨.
 
 ## 점자 글꼴 디코드 (필수)
 
@@ -133,8 +146,9 @@ spec.txt 디코드 시 사용한다.
 - [x] **Phase 0** 환경 준비: Poppler 설치, `spec.txt` 추출, 절별 행 인덱스.
 - [~] **Phase 1** 변경점 카탈로그: 제5·12·13·14절, 제64·65·67·69항 완료.
       약자/약어 detail, 옛글자, 로마자 전환, 수학·음악·외국어 미착수.
-- [~] **Phase 2** 테스트 하네스: 약 50개 회귀 테스트 누적. **빌드 환경
-      미구비** 상태로 검증 불가. G1 하네스는 미작성.
+- [~] **Phase 2** 테스트 하네스: 약 80개 회귀 테스트 누적. 빌드 환경 구축
+      완료, 우리 추가분 전부 통과 확인. 기존 회귀 9건 실패 별도 조사 대상
+      (아래 "기존 회귀 실패" 참조). G1 하네스는 미작성.
 - [~] **Phase 3** 영역별 수정: 아래 "구현 진행" 표 참조.
 - [ ] **Phase 4** 정리: `ko-g1.ctb`/`ko-g2.ctb` 헤더 TODO 정리, 저작권 갱신,
       `ko-2006*` 및 `ko-2006-g2_harness.yaml` 삭제.
@@ -170,6 +184,31 @@ spec.txt 디코드 시 사용한다.
 | 수학·음악·외국어 | ❌ | 후순위 |
 
 ## 알려진 잔여 이슈
+
+### 기존 회귀 실패 9건 (이번 세션 변경 무관)
+
+`lou_checkyaml`로 첫 풀 실행 시 발견. 우리 추가분(line 141 이후) 0건 실패.
+모두 line 18~59 (이전 세션에 작성된 부분).
+
+| 라인 | 입력 | Expected | Received | 패턴 |
+|---|---|---|---|---|
+| 18 | `가, 나` | `⠫⠐ ⠉⠣` | `⠫⠐ ⠉` | 끝 "나"의 ㅏ(126) 누락. xfail였는데 Unexpected Pass로 보고 |
+| 22 | `가, 나` | `⠫⠐ ⠉⠣` | `⠫⠐ ⠉` | 끝 "나"의 ㅏ 누락 |
+| 24 | `가·나` | `⠫⠐⠆⠉⠣` | `⠫⠐⠆⠉` | 끝 "나"의 ㅏ 누락 |
+| 26 | `음…` | `⠭⠠⠠⠠` | `⠪⠢⠠⠠⠠` | "음"이 풀어쓰기(⠪⠢=246-26)로 출력. expected `⠭`(1346) 자체가 의심 |
+| 28 | `음...` | `⠭⠲⠲⠲` | `⠪⠢⠲⠲⠲` | 동상 |
+| 30 | `"예"` | `⠦⠝⠴` | `⠦⠌⠴` | "예"가 ⠌(34)로 출력. expected `⠝`(1345)가 의심 |
+| 32 | `'예'` | `⠠⠦⠝⠴⠄` | `⠠⠦⠌⠄` | 동상 |
+| 48 | `가—나` | `⠫⠤⠤⠉⠣` | `⠫⠤⠤⠉` | 끝 "나"의 ㅏ 누락 |
+| 59 | `가 → 나` | `⠫ ⠒⠕ ⠉⠣` | `⠫ ⠒⠕ ⠉` | 끝 "나"의 ㅏ 누락 |
+
+- **그룹 A (5건, line 18·22·24·48·59)**: 문장 끝 "나" 단음절이 14만 출력, 126 누락.
+  ko-chars.cti의 `sign 나 14-126`이 제대로 적용 안 됨. ko-g2-rules.cti에 끝
+  컨텍스트에서 "나"의 ㅏ를 자르는 규칙(또는 lowword/word 14 매핑) 의심.
+- **그룹 B (2건, line 26·28)**: "음" 풀어쓰기 vs expected ⠭ — expected 작성이
+  잘못됐을 가능성. spec 검증 필요.
+- **그룹 C (2건, line 30·32)**: 인용 부호 안 "예" — expected ⠝(1345) vs 실제 ⠌(34).
+  expected 작성이 잘못됐을 가능성. spec 검증 필요.
 
 ### 가 약자 + 모음 시리즈 (제14항 해석 주의)
 
@@ -322,8 +361,10 @@ spec.txt 디코드 시 사용한다.
   커밋: 6c3d3eb4, f0bddd13, 4d3bd77d, 80f8653c, 511b6252, 64367f40, 28c76db1,
   84f9fb7c, 3ab40732.
 - ko-g2-rules.cti 갱신: 제11항 모음+예 구분표 36 누락 252개 엔트리 일괄 수정 (4558c787).
-- 회귀 테스트 약 50개 누적. **빌드 검증 미실시** — 다음 세션에서 환경 구성 후
-  `lou_checkyaml tests/braille-specs/ko-g2_harness.yaml` 실행 필요.
+- MSYS2 UCRT64 빌드 환경 구축. `lou_checkyaml`로 회귀 약 80건 실행 →
+  이번 세션에 추가/정정한 항목(가예 28·팠·껐·제15·16·17항 회귀 28건) **전부 통과**.
+  기존 실패 9건 발견 (line 18~59) — 받침 ⠣ 누락(가/나 시리즈), 줄임표,
+  ⠝/⠌ 혼동 패턴. 다음 세션 작업 후보로 등록 (아래 "기존 회귀 실패" 섹션).
 - CLAUDE.md 재구성, Phase 5 한소네 매핑 표 등록.
 
 ### 2026-05-03
