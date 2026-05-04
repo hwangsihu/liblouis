@@ -220,16 +220,54 @@ spec.txt 디코드 시 사용한다.
 다른 영역 작업 마무리 후 마지막 단계로 진행. 외부 사용자 피드백 반영분.
 **작업 종료 시 이 섹션은 삭제**한다 (CLAUDE.md를 짧게 유지).
 
-### A. 한글↔로마자 전환 마커 (제30·32항)
+### A. 한글↔로마자 전환 마커 (제29·32항)
 
-- 현재: `ko.cti` L256에 `letsign 356`만 있음. 두 글자 이상 영단어 시작에 356,
-  종료에 256 자동 삽입은 **미구현**.
-- 가능 여부: **가능**. `attribute hangul …` + `noback context` 조합. `tables/bg.utb`
-  L245~272가 Cyrillic↔Latin 전환에 같은 메커니즘 사용 — 패턴 차용 가능.
-- 구현 위치 후보: `ko.cti` 또는 별도 `ko-roman-transition.cti`.
-- 주의: 기존 `letsign 356`과 상호작용 (한 글자만 = letsign, 두 글자 이상 =
-  begin/end markers). lookahead로 분기하거나 letsign 비활성화.
-- 한계: 순방향 전용. 역변환은 별도 처리.
+**관련 spec 조항** (spec.txt L1126~1340):
+- 제29항: 영자 그룹 앞에 로마자표 0(=356), 뒤에 종료표 4(=256)
+- 제29항 [다만]: 문단 전체가 로마자일 때 시작/종료표 생략 가능
+- 제33항: 영자↔한글 사이 점형이 다른 부호(`, : ; ―`) → 종료표 생략, 부호는 한글식
+- 제33항 [다만]: `. ? ! ...` 뒤 종료표 생략 / `/ - ~` 앞에 종료표
+- 제34항: 따옴표·괄호 안 영자 → 종료표 생략
+- 제35항: 영자와 숫자 이어 나올 때 → 종료표 생략
+
+**현재 동작 진단 (2026-05-04)**:
+- `letsign 356`은 ko.cti에 정의돼 있으나 ko-g2-rules.cti가 include하는
+  en-us-g2.ctb → en-us-g1.ctb의 `letsign 56`이 더 늦게 로드돼 override.
+  결과적으로 G2에서 letsign이 56(점 5-6)으로 출력 (한국 spec 위반).
+- 자동 letsign은 단일 letter에만 적용, 다중 letter 그룹·종료표는 미구현.
+
+**시도 (2026-05-04)와 회귀**:
+ko-g2-rules.cti에 다음 추가:
+```
+noletsign abcdefghijklmnopqrstuvwxyz
+noletsign ABCDEFGHIJKLMNOPQRSTUVWXYZ
+noback context `[]$l @356           # 입력 시작 + letter
+noback context $s[]$l @356          # space + letter
+noback context $S[]$l @356          # sign(한글 등) + letter
+noback context $p[]$l @356          # punct + letter
+noback context $l[]~ @256            # letter + 입력 끝
+noback context $l[]$s @256          # letter + space
+noback context $l[]$S @256          # letter + sign
+```
+한↔영 기본 경계는 정확히 작동(`안녕 hi 2025` → `⠣⠒⠉⠻ ⠴⠓⠊⠲ ⠼⠃⠚⠃⠑`).
+그러나 회귀 3건:
+- `unity` 단독 → 시작 356 추가 (제29항 [다만] 미반영. 사용자 결정 필요)
+- `@a` → `@` 점형이 ⠈→⡈로 7점 변형 (사이드 이펙트, 미규명)
+- `1 %p` → `%p`(ko.cti `always %p 356-1234-1234`) 매핑 분해.
+  context의 `$l[]$s @256`이 단독 'p'에 매치돼 multi-char 매핑 우선순위 깨짐.
+
+또 영자 단어 내에 contraction(`ne`, `st` 등)이 적용된 경우 마지막 letter가
+contraction에 흡수돼 종료표 매치 실패(예: `iPhone` 끝에 256 누락).
+
+**다음 시도 시 고려할 방향**:
+1. context 룩어헤드를 `$l$l[]$s` 같이 다중 letter 한정해 단일 letter는
+   letsign에 위임 — 단 `%p` 같은 multi-char 매핑은 여전히 충돌 우려.
+2. pass2 cell-level 후처리 — 영자 점형(8점 letter) vs 한글 점형 식별 어려움.
+3. 단어 단위 매칭 — `prfword`/`sufword` 같은 단어 경계 opcode 활용 검토.
+4. en-us-g2.ctb가 정의하는 contraction 룰이 letter 매치를 가로채는 문제는
+   context 룰을 pass2/pass3로 옮기는 식으로 회피 가능 여부 확인.
+
+**한계**: 순방향 전용. 역변환은 별도 처리.
 
 ### B. 쌍시옷 받침 vs. 예 충돌 (제14·16항 영역)
 
