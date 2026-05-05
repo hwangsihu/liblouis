@@ -26,6 +26,10 @@
 # Globals:
 include en-us-g2.ctb To display contracted English in Korean grade 2 mode. Contributed by a certain Mr. Hahn in U.S.
 
+always ... 256-256-256
+always ..." 256-256-256-356
+always ...' 256-256-256-356-3
+
 # Common letter contractions:
 # Using "always" opcode in order for contraction to work correctly.
 # Otherwise letters shows grade 1 dot patterns.

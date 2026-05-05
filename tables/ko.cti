@@ -246,15 +246,12 @@ always \\ 456-16
 always | 456-1256
 always \s-\s 36
 
-always ..." 256-256-256-356
 always … 6-6-6
 always ... 256-256-256
+always ..." 256-256-256-356
 always ...' 256-256-256-356-3
-repeated .... 0
 repeated ____ 456-36
 repeated ---- 36
-always .\s.\s." 3-3-3-356
-always .\s.\s. 3-3-3 . . .
 always $ 356-4-234
 always ¢ 356-4-14
 always ￠ 356-4-14
