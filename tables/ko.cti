@@ -340,6 +340,10 @@ always \\_ 56 letter sign before Roman page numbers
 noback pass2 @56-56 @56
 noback pass2 @3-56 @3
 
+# 제69항: 빗금으로 연결된 인접 단위 사이의 종료표(256)·시작표(356) 제거
+# 0mg4 + / + 0dl4 → 0mg / dl4 (외측 wrapping 1번)
+noback pass2 @256-456-34-356 @456-34
+
 
 #Korean section:
 
