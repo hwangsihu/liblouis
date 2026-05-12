@@ -101,6 +101,7 @@ EXTRA_DIST =					\
 	ka.yaml					\
 	kk.yaml					\
 	kmr.yaml				\
+	ko-braillesense-comp8-backward_harness.yaml	\
 	ko-g2_harness.yaml			\
 	litdigits6Dots_backward.yaml		\
 	lg-ug-g1.yaml				\

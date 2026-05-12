@@ -250,6 +250,7 @@ table_files = \
 	km-g1.utb \
 	kmr.tbl \
 	kn.tbl \
+	ko-braillesense-comp8-backward.utb \
 	ko-chars.cti \
 	ko.cti \
 	ko-g1.ctb \

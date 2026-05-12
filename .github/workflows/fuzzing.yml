@@ -189,6 +189,7 @@ jobs:
           - kh-in-g1.utb
           - kk.utb
           - km-g1.utb
+          - ko-braillesense-comp8-backward.utb
           - ko-g1.ctb
           - ko-g2.ctb
           - kok.ctb

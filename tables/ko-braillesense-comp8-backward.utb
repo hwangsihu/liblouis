@@ -1,0 +1,88 @@
+# liblouis: Korean BrailleSense computer 8-dot input -> text (backward)
+#
+#-index-name: Korean, BrailleSense computer 8-dot
+#-display-name: Korean BrailleSense computer braille (backward)
+#
+#+language: ko
+#+type: computer
+#+system: braillesense
+#+dots: 8
+#
+# This table can only be used in backward mode.
+#+direction: backward
+#
+#-copyright: 2026, Sihu Hwang
+#
+#  Copyright (C) 2026 by Sihu Hwang.
+#
+#  This file is part of liblouis.
+#
+#  liblouis is free software: you can redistribute it and/or modify it
+#  under the terms of the GNU Lesser General Public License as
+#  published by the Free Software Foundation, either version 2.1 of the
+#  License, or (at your option) any later version.
+#
+#  liblouis is distributed in the hope that it will be useful, but
+#  WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+#  Lesser General Public License for more details.
+#
+#  You should have received a copy of the GNU Lesser General Public
+#  License along with liblouis. If not, see
+#  <http://www.gnu.org/licenses/>.
+
+# BrailleSense is a Korean braille notetaker line by HIMS that accepts 8-dot
+# computer braille input for punctuation, often as two- or three-cell
+# sequences. This table back-translates such sequences to Unicode
+# punctuation, alongside a forward Korean translation table (e.g. ko-g2.ctb).
+
+include spaces.uti
+
+nofor punctuation \x0021 2358
+nofor sign        \x0023 34568
+nofor sign        \x0024 12468
+nofor sign        \x0025 1468
+nofor sign        \x0026 48-123468
+nofor punctuation \x0027 37
+nofor punctuation \x0028 2368-38
+nofor punctuation \x0029 68-3568
+nofor sign        \x002A 58-358
+nofor sign        \x002B 268
+nofor punctuation \x002C 58
+nofor punctuation \x002D 36
+nofor punctuation \x002E 2568
+nofor punctuation \x002F 348
+nofor punctuation \x003A 58-28
+nofor punctuation \x003B 568-238
+nofor sign        \x003C 1268
+nofor sign        \x003D 258-258
+nofor sign        \x003E 3458
+nofor punctuation \x003F 2367
+nofor sign        \x0040 48
+nofor punctuation \x005B 2368-238
+nofor sign        \x005C 168
+nofor punctuation \x005D 568-3568
+nofor sign        \x005E 48-268
+nofor sign        \x005F 4567
+nofor sign        \x0060 47
+nofor punctuation \x007B 2368-28
+nofor sign        \x007C 12568
+nofor punctuation \x007D 58-3568
+nofor sign        \x007E 48-358
+nofor punctuation \x00B7 58-238
+nofor punctuation \x2018 68-2368
+nofor punctuation \x2019 3568-38
+nofor punctuation \x201C 2368
+nofor punctuation \x201D 3568
+nofor punctuation \x2026 2568-2568-2568
+nofor math        \x2190 2468-258
+nofor math        \x2192 258-1357
+nofor math        \x2212 357
+nofor punctuation \x3008 58-23568
+nofor punctuation \x3009 23568-28
+nofor punctuation \x300A 568-23568
+nofor punctuation \x300B 23568-238
+nofor punctuation \x300C 58-2368
+nofor punctuation \x300D 3568-28
+nofor punctuation \x300E 568-2368
+nofor punctuation \x300F 3568-238
