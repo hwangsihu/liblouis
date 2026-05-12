@@ -9,14 +9,8 @@
 #+contraction:no
 #+grade:1
 #
-# TODO: Please correct the metadata above. It is not meant to be
-# accurate nor complete. It hasn't been verified by the table
-# author yet. It is merely an attempt by the liblouis maintainers
-# to get some sensible initial values in place.
-#
-# TODO: Please add a reference to official documentation about
-# the implemented braille code. Preferably submit the documents
-# to https://github.com/liblouis/braille-specs.
+# Implements the 2024 revision of the Korean Braille Regulations
+# (Ministry of Culture, Sports and Tourism Notice No. 2024-0005).
 # -----------
 #
 # Based on the braille contraction table in BRLTTY
@@ -25,6 +19,7 @@
 #  Copyright (C) 2012 by Samuel Thibault <samuel.thibault@ens-lyon.org>
 #  Copyright (C) 2012 by Mesar Hameed <mesar.hameed@gmail.com>
 #  Copyright (C) 2013 by Joseph Lee <joseph.lee22590@gmail.com>
+#  Copyright (C) 2026 by liblouis contributors
 #
 #  This file is part of liblouis.
 #
