@@ -21,6 +21,10 @@
   커밋 메시지로 남긴다.
 - **장기 가이드는 메모리 대신 CLAUDE.md에 누적**: 이 프로젝트의 결정·규칙은
   세션 간 메모리 파일이 아닌 본 문서에 기록한다.
+- **필요 시 이전 채팅 참고**: 본 문서는 multi-session 요약·결정만 담는다.
+  시도/회귀의 세부 로그, 사용자 지적의 원문 맥락, 명령 출력 등은 기록하지
+  않으니, 모호하거나 누락된 컨텍스트는 이전 대화 로그를 확인한다 (예:
+  특정 커밋의 동기, 되돌린 시도의 회귀 양상, 사용자 지정 옵션의 이유).
 
 ## 참고 자료 위치
 
@@ -33,12 +37,9 @@
 ## 환경/도구
 
 - OS: Windows 11, PowerShell 7
-- 설치된 도구: `scoop`, `winget`, Python 3.14 (`py`, `python`), **Poppler** (`pdftotext` 25.12.0)
-- 추출 명령: `pdftotext -layout -enc UTF-8 'C:\braille\[개정]+한국+점자+규정+전문.pdf' 'C:\braille\spec.txt'`
 - **빌드 환경**: MSYS2 UCRT64 (`C:\msys64\msys2_shell.cmd -ucrt64`).
   필수 패키지: `mingw-w64-ucrt-x86_64-{gcc,python,pkgconf,libyaml}`.
-  - **호출 시 `-no-start` 옵션 사용 금지** (사용자 지정).
-    표준 형식: `C:/msys64/msys2_shell.cmd -ucrt64 -defterm -here -c "..."`
+  - 표준 형식: `C:/msys64/msys2_shell.cmd -ucrt64 -defterm -here -no-start -c "..."`
   - 빌드: `./autogen.sh && ./configure --enable-ucs4 && make -j4`
   - **빌드 전 필수 패치 (미커밋)**: `liblouis/metadata.c`의 `#ifdef _MSC_VER` 두 곳을
     `#if defined(_MSC_VER) || defined(_WIN32)`로 바꿔야 mingw에서 빌드됨
@@ -117,9 +118,6 @@ spec.txt 디코드 시 사용한다.
 | `tables/ko-g1.ctb`, `ko-g2.ctb` | 작음 | 위 파일들을 묶는 진입점 |
 | `tests/braille-specs/ko-g2_harness.yaml` | — | 자동 테스트 |
 
-`tables/ko-2006*.{cti,ctb}` 와 `tests/braille-specs/ko-2006-g2_harness.yaml`
-는 Phase 4에서 삭제 예정.
-
 ## spec.txt 절별 위치 인덱스 (행 번호)
 
 | 절 | 시작 행 | 비고 |
@@ -151,8 +149,8 @@ spec.txt 디코드 시 사용한다.
 - [~] **Phase 2** 테스트 하네스: 104개 회귀 테스트 누적. MSYS2 UCRT64 빌드
       환경 구축 완료, 전건 통과(0 failures). G1 하네스는 미작성.
 - [~] **Phase 3** 영역별 수정: 아래 "구현 진행" 표 참조.
-- [ ] **Phase 4** 정리: `ko-g1.ctb`/`ko-g2.ctb` 헤더 TODO 정리, 저작권 갱신,
-      `ko-2006*` 및 `ko-2006-g2_harness.yaml` 삭제.
+- [x] **Phase 4** 정리: `ko-2006*` 파일·하네스 삭제, 빌드 시스템 정리,
+      ctb 헤더 TODO/FIXME 제거, 저작권 갱신.
 - [ ] **Phase 5** (막바지) 언어 전환 마커, 쌍시옷·예 충돌 점검, 한소네 입력
       테이블 신설 — 아래 "막바지 작업" 섹션 참고.
 
@@ -357,15 +355,27 @@ contraction에 흡수돼 종료표 매치 실패(예: `iPhone` 끝에 256 누락
 
 ## 결정/미결 질문
 
-- ✅ **결정 (2026-05-03)**: 작업 완료 후 `ko-2006*` 구 규정 테이블은 모두 삭제. (Phase 4)
-  - 대상: `tables/ko-2006.cti`, `tables/ko-2006-g1.ctb`, `tables/ko-2006-g2.ctb`,
-    `tests/braille-specs/ko-2006-g2_harness.yaml`
 - ✅ **결정 (2026-05-03)**: 우선순위는 기호·문장부호(제12·13·14절) → 약자/약어 순.
 - _Q_ **(외부 피드백, 2026-05-04)**: 자음자 약자(ㄴ·ㄷ·ㅁ·ㅂ·ㅈ·ㅋ·ㅌ·ㅎ)에서
   쌍시옷 받침/예 충돌을 "36점 부가"로 회피한다는 관행의 출처. spec 본문에는
   없음 — 점역 지침서 등 외부 자료 인용 확인 필요.
 
 ## 진행 상황 (날짜순, 최신이 위)
+
+### 2026-05-13
+- **Phase 4 정리 완료**: `ko-2006*` 테이블 3종(`ko-2006.cti`,
+  `ko-2006-g1.ctb`, `ko-2006-g2.ctb`) + 하네스(`ko-2006-g2_harness.yaml`)
+  삭제. 빌드 시스템(`tables/Makefile.am`, `tests/Makefile.am`,
+  `tests/braille-specs/Makefile.am`)·`spaces.yaml`·`fuzzing.yml`에서
+  ko-2006 참조 제거. ko-chars.cti 헤더 주석에서 "old set/new 2006
+  edition" 문구를 단일 ko.cti 참조로 갱신. `ko-g1.ctb`/`ko-g2.ctb`
+  헤더의 metadata TODO 제거, 2024 spec 참조 추가, 저작권 라인 갱신.
+  `ko-g2.ctb`의 stale FIXME(emphasis class 중복) 제거 — 실제 검증 결과
+  ko-g2-rules.cti에는 emphasis class 정의 없음.
+  회귀 ko-g2 104건 + spaces 1531건 통과.
+- **CLAUDE.md 정리**: 환경/도구에서 spec.txt 추출 완료된 Poppler/`pdftotext`
+  관련 줄 제거. msys2_shell 호출 가이드를 `-no-start` 사용으로 변경
+  (창 깜빡임 방지, 사용자 재테스트 결과).
 
 ### 2026-05-05
 - **제53항 줄임표 영문 G1 override 차단** (56477875):
