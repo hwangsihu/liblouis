@@ -250,9 +250,6 @@ table_files = \
 	km-g1.utb \
 	kmr.tbl \
 	kn.tbl \
-	ko-2006.cti \
-	ko-2006-g1.ctb \
-	ko-2006-g2.ctb \
 	ko-chars.cti \
 	ko.cti \
 	ko-g1.ctb \

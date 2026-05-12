@@ -28,7 +28,7 @@
 # anything, as this table was generated from a C program.
 
 #A dictionary of individual Korean characters and their dot representations.
-#This will be merged into base Korean tables for both old set (ko.cti) and new 2006 edition (ko-2006.cti).
+#This will be merged into the base Korean table (ko.cti).
 # This dictionary also includes basic translation rules to be applied in both grades 1 and 2.
 
 sign ᄀ 4

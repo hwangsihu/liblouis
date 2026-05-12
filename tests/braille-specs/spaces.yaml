@@ -976,28 +976,6 @@ tests:
   - ['\x2028', '\x0020']
   - ['\x2029', '\x0020']
   - ['\x202f', '\x0020']
-table: ko-2006-g1.ctb
-flags: {testmode: bothDirections}
-tests:
-  - ['\x0009', '9']
-  - ['\x0020', '\x0020']
-  - ['\x00a0', 'a']
-flags: {testmode: forward}
-tests:
-  - ['\x000a', '\x0020']
-  - ['\x000c', '\x0020']
-  - ['\x000d', '\x0020']
-table: ko-2006-g2.ctb
-flags: {testmode: bothDirections}
-tests:
-  - ['\x0009', '9']
-  - ['\x0020', '\x0020']
-  - ['\x00a0', 'a']
-flags: {testmode: forward}
-tests:
-  - ['\x000a', '\x0020']
-  - ['\x000c', '\x0020']
-  - ['\x000d', '\x0020']
 table: ko-g1.ctb
 flags: {testmode: bothDirections}
 tests:
@@ -1855,8 +1833,6 @@ table: kha.tbl
 table: kk.utb
 table: kmr.tbl
 table: kn.tbl
-table: ko-2006-g2.ctb
-table: ko-2006-g1.ctb
 table: ko-g2.ctb
 table: ko-g1.ctb
 table: kok.tbl
