@@ -16,7 +16,7 @@
 
 ## 참고 자료 위치
 
-- 규정 본문 추출 텍스트: `C:\braille\spec.txt` (319 KB) — 절별 행 인덱스는 아래 표 참조.
+- 규정 본문 추출 텍스트: `spec.txt` (319 KB) — 절별 행 인덱스는 아래 표 참조.
 
 ## 환경/도구
 
@@ -123,7 +123,7 @@ PDF 본문은 **점자 글꼴**로 인쇄되어 ASCII 문자가 점 번호(NABCC
 
 - [x] **Phase 0** 환경 준비: Poppler 설치, `spec.txt` 추출, 절별 행 인덱스.
 - [~] **Phase 1** 변경점 카탈로그: 제5·12·13·14절, 제64·65·67·69항 완료. 약자/약어 detail, 옛글자, 로마자 전환, 수학·음악·외국어 미착수.
-- [~] **Phase 2** 테스트 하네스: ko-g2 104건 + BrailleSense backward 48건 누적. MSYS2 UCRT64 빌드 환경 구축 완료, 전건 통과(0 failures). G1 하네스는 미작성.
+- [~] **Phase 2** 테스트 하네스: ko-g2 238건(xfail 4건 포함) + BrailleSense backward 48건. MSYS2 UCRT64 빌드 환경 구축 완료, 전건 통과(0 failures). G1 하네스는 미작성.
 - [~] **Phase 3** 영역별 수정: 아래 "구현 진행" 표 참조.
 - [x] **Phase 4** 정리: `ko-2006*` 파일·하네스 삭제, 빌드 시스템 정리, ctb 헤더 TODO/FIXME 제거, 저작권 갱신.
 - [ ] **Phase 5** (막바지) 언어 전환 마커, 쌍시옷·예 충돌 점검, 한소네 입력 테이블 신설 — 아래 "막바지 작업" 섹션 참고.
@@ -244,9 +244,9 @@ noback context $l[]$S @256          # letter + sign
 - spec disambiguation: 제14항 본문(자음자 약자 + 모음 → 약자 미사용), **제14항 [붙임]** "팠은 ㅏ를 생략하지 않는다" — **ㅍ만 명시 예외**. ㄴ·ㄷ·ㅁ·ㅂ·ㅈ·ㅋ·ㅌ·ㅎ에 대한 [붙임] 명시는 spec.txt에 없음.
 - 사용자 언급 "36점 부가" 규칙은 spec.txt 검색 안 됨 — **출처 확인 필요** (점역 지침서 등 외부 자료?). 결정되면 `ko-g2-rules.cti`에 컨텍스트 규칙 추가.
 
-### C. BrailleSense 8점 입력 backward 테이블 ✅ (2026-05-13)
+### C. BrailleSense 8점 입력 backward 테이블 ✅
 
-`tables/ko-braillesense-comp8-backward.utb` 신설. 48개 부호 매핑(단일/2셀/3셀) + 하네스 48건 통과. 매핑 본문은 테이블 파일이 권위 — 추가/수정은 거기서.
+`tables/ko-braillesense-comp8-backward.utb` 신설 완료. 매핑 본문은 테이블 파일이 권위 — 추가/수정은 거기서.
 
 ## 결정/미결 질문
 
