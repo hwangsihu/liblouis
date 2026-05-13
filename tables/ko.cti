@@ -305,6 +305,8 @@ always © 45-14
 always ® 45-1235
 always ™ 45-2345
 always • 456-256
+always 〮 456-2
+always 〯 456-13
 
 # special character sequences
 compbrl :// URLs
