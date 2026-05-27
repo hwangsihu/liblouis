@@ -30,6 +30,8 @@ always ... 256-256-256
 always ..." 256-256-256-356
 always ...' 256-256-256-356-3
 
+noback pass3 @5-56-6 @5-6-56
+
 # Common letter contractions:
 # Using "always" opcode in order for contraction to work correctly.
 # Otherwise letters shows grade 1 dot patterns.
