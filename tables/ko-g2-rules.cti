@@ -26,6 +26,8 @@
 # Globals:
 include en-us-g2.ctb To display contracted English in Korean grade 2 mode. Contributed by a certain Mr. Hahn in U.S.
 
+letsign 356
+
 always ... 256-256-256
 always ..." 256-256-256-356
 always ...' 256-256-256-356-3
