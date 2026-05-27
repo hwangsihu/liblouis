@@ -224,9 +224,9 @@ spec 예문 부재로 유지: 2000년, unity, 끝., 왜?, 야!, "예", '예', (�
 - 제34항: 따옴표·괄호 안 영자 → 종료표 생략
 - 제35항: 영자와 숫자 이어 나올 때 → 종료표 생략
 
-**현재 동작 진단 (2026-05-04)**:
-- `letsign 356`은 ko.cti에 정의돼 있으나 ko-g2-rules.cti가 include하는 en-us-g2.ctb → en-us-g1.ctb의 `letsign 56`이 더 늦게 로드돼 override. 결과적으로 G2에서 letsign이 56(점 5-6)으로 출력 (한국 spec 위반).
-- 자동 letsign은 단일 letter에만 적용, 다중 letter 그룹·종료표는 미구현.
+**현재 동작 진단 (2026-05-28 갱신)**:
+- 단일 letter letsign: b2b79a10에서 ko-g2-rules.cti의 en-us include 직후 `letsign 356` 재선언으로 spec 일치(356). largesign 매칭(예: `a` 관사) 케이스는 엔진 insertLetterSign 경로를 우회해 letsign 미삽입 — 엔진 동작이며 spec 위반 아님.
+- 다중 letter 그룹·종료표(256): 엔진 자동 처리 없음. context 옵코드 도입 필요(아래 시도 참고).
 
 **시도 (2026-05-04)와 회귀**: ko-g2-rules.cti에 다음 추가:
 ```
