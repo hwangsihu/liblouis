@@ -2240,13 +2240,20 @@ always 힎 245-12345-356
 
 # Case 1: multi-cell contractions:
 # These require that two cells are used for contractions (shorthand for commonly used words).
-always 그래서	1-234
-always 그러나	1-14
-always 그러면	1-25
-always 그러므로	1-26
-always 그런데	1-1345
-always 그리고	1-136
-always 그리하여	1-156
+noback context `["그래서"] @1-234
+noback context _!$S["그래서"] @1-234
+noback context `["그러나"] @1-14
+noback context _!$S["그러나"] @1-14
+noback context `["그러면"] @1-25
+noback context _!$S["그러면"] @1-25
+noback context `["그러므로"] @1-26
+noback context _!$S["그러므로"] @1-26
+noback context `["그런데"] @1-1345
+noback context _!$S["그런데"] @1-1345
+noback context `["그리고"] @1-136
+noback context _!$S["그리고"] @1-136
+noback context `["그리하여"] @1-156
+noback context _!$S["그리하여"] @1-156
 
 # Case 2: Special jamo (conscenant-vowel) sequences (mostly "ah" sounds):
 # These require that "ah" (dots 126) be inserted before reading "ng" conscenant.
