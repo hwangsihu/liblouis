@@ -192,6 +192,7 @@ spec 예문이 없거나 spec 표(약자·부호·옛글자) 자체 검증용 �
 - 로드 순서: ko.cti → ko-g2-rules.cti(en-us-g2.ctb 포함→ en-us-g1.ctb). 영문 G1이 마지막 → ko.cti의 한국 부호 매핑이 후행 정의에 override될 수 있음. spec 제32항으로 영문 G2 include 자체는 유지 필요.
 - **방침**: 충돌 발견된 항목만 ko-g2-rules.cti의 en-us-g2.ctb include 직후에 한국 spec 매핑/counter pass 재선언 (옵션 C). 처리 완료: `...`/`..."`/`...'`(56477875), ᄷ pass2(ab63c78d).
 - 근본 개편(ko.cti 분리·include 순서 변경)은 미적용 — 영향 범위·검증 비용 큼.
+- en-us → UEB 전환은 막바지 작업 D 참조 (2026-06-08 단순 교체 불가 확인, US 유지).
 
 ### 제22항 비-표 합용병서 결합형 초성 (ㅇ계·미등록 잔여)
 
@@ -279,5 +280,22 @@ noback context $l[]$S @256
 ### C. BrailleSense 8점 입력 backward 테이블 ✅
 
 `tables/ko-braillesense-comp8-backward.utb` 신설 완료. 매핑 본문은 테이블 파일이 권위 — 추가/수정은 거기서.
+
+### D. 영어 약자 테이블 en-us → UEB 전환 (제28·32항)
+
+**동기**: spec 제28·30·32항이 모두 "통일영어점자(UEB) 규정에 따라"를 명시. 현재 `ko-g2-rules.cti:27`은 `en-us-g2.ctb`(EBAE 미국식)를 include — spec과 표준 불일치. UEB가 사실상 표준이므로 `en-ueb-g2.ctb`로 가는 게 목표.
+
+**2026-06-08 시도 결과 — 단순 교체는 불가, US 유지로 되돌림**:
+- `en-ueb-g2 → en-ueb-g1`이 **`numericmodechars .,`로 UEB numeric mode를 전역 ON**(en-us엔 없음). 한국어 수 처리(제11절 수 뒤 한글 `after digit` 수백 룰·수표·단위)는 numeric mode OFF를 전제 → 구조적 양립 불가. `numericmodechars`는 테이블당 전역 boolean이고 **끄는 directive가 없다**.
+  - 증상: `100㎎` → ㎎ undefined(`'\x338e'`), `100 ㎎`(공백) → 정상. 숫자 뒤 문자가 numeric mode에 흡수됨.
+- 추가 충돌: en-ueb-g1이 **en-ueb-math.ctb를 include**(제45항 `+ = < > ÷` 덮음), UEB 부호형(`~ % °` 등), `nonumsign 56`(단독 letter 앞 `⠰` 삽입), emphasis(italic/bold `after`형 — ko.cti와 충돌해 컴파일 에러).
+  - 하네스 영향: en-us 0 실패 → en-ueb 18 실패(수학 5·`~` 2·단위/화폐 undefined 8·단독 letter 2·`2000년` 1).
+- **결론**: en-us-g2가 깨끗하게 embed됐던 건 "단순"해서(numeric mode·math·공격적 재정의 없음)다. en-ueb는 중심 기능(수·수학·단위)을 깨뜨린다.
+
+**향후 선택지 (택1)**:
+1. **현행 유지(en-us)** — 약자는 EBAE. 제32항 'UEB'와 어긋나나 차이는 라틴 블록 내부로 국한. (현재 상태)
+2. **UEB 약자만 추린 커스텀 include** — en-ueb-g2를 포크해 `numericmodechars`·en-ueb-math include·충돌 부호/emphasis 제거, 약자·letter·caps만 남긴 ko 전용 테이블 작성. UEB 약자 확보 + 회귀 회피, 단 포크 유지보수 부담.
+3. **자체 UEB 구현** — 비현실적(약 4500줄 재현 + 유지보수).
+- 어느 길이든 emphasis는 별도 숙제: 영어 g2를 include하는 한 emphasis가 그 영어값으로 전역 고정 → **제56항(드러냄/밑줄 `6-36…36-3`, 굵게 `56-36…36-23`) 불가**. 현재 ko.cti emphasis는 en-us 복사본이라 제56항과 이미 불일치.
 
 날짜별 작업 이력은 `git log`를 참조한다. 본 문서는 살아 있는 결정·규칙·이슈만 누적한다.
