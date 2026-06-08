@@ -25,7 +25,6 @@
 - **빌드 환경**: MSYS2 UCRT64 (`C:\msys64\msys2_shell.cmd -ucrt64`). 필수 패키지: `mingw-w64-ucrt-x86_64-{gcc,python,pkgconf,libyaml}`.
   - 표준 형식: `C:/msys64/msys2_shell.cmd -ucrt64 -defterm -here -no-start -c "..."`
   - 빌드: `./autogen.sh && ./configure --enable-ucs4 && make -j$(nproc)`
-  - **빌드 전 필수 패치 (미커밋)**: `liblouis/metadata.c`의 `#ifdef _MSC_VER` 두 곳을 `#if defined(_MSC_VER) || defined(_WIN32)`로 바꿔야 mingw에서 빌드됨 (gnulib `dirent.h` ↔ mingw native `dirent.h` 충돌 회피, native Win API 사용). Working tree에 유지. upstream 보고/PR 후보.
   - 회귀 실행 (PowerShell):
     ```
     $env:PATH = "C:\msys64\ucrt64\bin;" + $env:PATH
